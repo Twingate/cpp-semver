@@ -32,7 +32,7 @@ SOFTWARE.
 namespace semver
 {
 
-    typedef uint64_t BuildIdentifierPart;
+    using BuildIdentifierPart = uint64_t;
 
     const std::string default_prerelease_part = "0";
     const char prerelease_delimiter = '.';
@@ -51,7 +51,7 @@ namespace semver
 
     inline BuildIdentifierPart parse_build_identifier_part(const std::string& version_part)
     {
-        return (BuildIdentifierPart)std::stoull(version_part);
+        return static_cast<BuildIdentifierPart>(std::stoull(version_part));
     }
 
     inline std::vector<std::string> split(const std::string& text, const char& delimiter) {
@@ -335,13 +335,13 @@ namespace semver
 
             try {
                 if (strict && major_m.matched && minor_m.matched && patch_m.matched) {
-                    major = (BuildIdentifierPart) parse_build_identifier_part(major_m);
-                    minor = (BuildIdentifierPart) parse_build_identifier_part(minor_m);
-                    patch = (BuildIdentifierPart) parse_build_identifier_part(patch_m);
+                    major = parse_build_identifier_part(major_m);
+                    minor = parse_build_identifier_part(minor_m);
+                    patch = parse_build_identifier_part(patch_m);
                 } else if (!strict && major_m.matched) {
-                    major = (BuildIdentifierPart) parse_build_identifier_part(major_m);
-                    minor = minor_m.matched ? (BuildIdentifierPart) parse_build_identifier_part(minor_m) : 0;
-                    patch = patch_m.matched ? (BuildIdentifierPart) parse_build_identifier_part(patch_m) : 0;
+                    major = parse_build_identifier_part(major_m);
+                    minor = minor_m.matched ? parse_build_identifier_part(minor_m) : 0;
+                    patch = patch_m.matched ? parse_build_identifier_part(patch_m) : 0;
                 } else {
                     throw semver_exception("Invalid version: " + version_str);
                 }
