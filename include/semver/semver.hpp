@@ -32,7 +32,7 @@ SOFTWARE.
 namespace semver
 {
 
-    using BuildIdentifierPart = uint64_t;
+    using build_identifier_part = uint64_t;
 
     const std::string default_prerelease_part = "0";
     const char prerelease_delimiter = '.';
@@ -49,9 +49,9 @@ namespace semver
         semver_exception(const std::string& message) : std::runtime_error(message) { }
     };
 
-    inline BuildIdentifierPart parse_build_identifier_part(const std::string& version_part)
+    inline build_identifier_part parse_build_identifier_part(const std::string& version_part)
     {
-        return static_cast<BuildIdentifierPart>(std::stoull(version_part));
+        return static_cast<build_identifier_part>(std::stoull(version_part));
     }
 
     inline std::vector<std::string> split(const std::string& text, const char& delimiter) {
@@ -81,7 +81,7 @@ namespace semver
     private:
         bool m_numeric = false;
         std::string m_value;
-        BuildIdentifierPart m_numeric_value;
+        build_identifier_part m_numeric_value;
     public:
         prerelease_part(const std::string& part) {
             if (part.empty()) {
@@ -105,7 +105,7 @@ namespace semver
 
         bool numeric() const { return m_numeric; }
         std::string value() const { return m_value; }
-        BuildIdentifierPart numeric_value() const { return m_numeric_value; }
+        build_identifier_part numeric_value() const { return m_numeric_value; }
 
         int compare(const prerelease_part& other) const {
             if (m_numeric && !other.m_numeric) return -1;
@@ -205,9 +205,9 @@ namespace semver
 
     class version {
     private:
-        BuildIdentifierPart m_major;
-        BuildIdentifierPart m_minor;
-        BuildIdentifierPart m_patch;
+        build_identifier_part m_major;
+        build_identifier_part m_minor;
+        build_identifier_part m_patch;
         prerelease_descriptor m_prerelease;
         std::string m_build_meta;
 
@@ -224,9 +224,9 @@ namespace semver
             return 0;
         }
     public:
-        version(BuildIdentifierPart major = 0,
-                BuildIdentifierPart minor = 0,
-                BuildIdentifierPart patch = 0,
+        version(build_identifier_part major = 0,
+                build_identifier_part minor = 0,
+                build_identifier_part patch = 0,
                 std::string prerelease = "",
                 std::string build_meta = "")
                 : m_major{major},
@@ -235,9 +235,9 @@ namespace semver
                   m_prerelease{prerelease_descriptor::parse(prerelease)},
                   m_build_meta{build_meta} { }
 
-        BuildIdentifierPart major() const { return m_major; }
-        BuildIdentifierPart minor() const { return m_minor; }
-        BuildIdentifierPart patch() const { return m_patch; }
+        build_identifier_part major() const { return m_major; }
+        build_identifier_part minor() const { return m_minor; }
+        build_identifier_part patch() const { return m_patch; }
         std::string prerelease() const { return m_prerelease.str(); }
         std::string build_meta() const { return m_build_meta; }
 
@@ -314,9 +314,9 @@ namespace semver
         static version parse(const std::string& version_str, bool strict = true) {
             std::regex regex(strict ? version_pattern : loose_version_pattern);
             std::cmatch match;
-            BuildIdentifierPart major;
-            BuildIdentifierPart minor;
-            BuildIdentifierPart patch;
+            build_identifier_part major;
+            build_identifier_part minor;
+            build_identifier_part patch;
             std::string prerelease = "";
             std::string build_meta = "";
 
