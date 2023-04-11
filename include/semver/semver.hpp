@@ -49,7 +49,7 @@ namespace semver
         semver_exception(const std::string& message) : std::runtime_error(message) { }
     };
 
-    inline BuildIdentifierPart parse_version_identifier_or_exception(const std::string& version_part)
+    inline BuildIdentifierPart parse_version_identifier_part(const std::string& version_part)
     {
         return (BuildIdentifierPart)std::stoull(version_part);
     }
@@ -93,7 +93,7 @@ namespace semver
                     throw semver_exception(
                             "Pre-release part '" + part + "' is numeric but contains a leading zero.");
                 }
-                m_numeric_value = parse_version_identifier_or_exception(part);
+                m_numeric_value = parse_version_identifier_part(part);
                 m_numeric = true;
             }
             if (!is_valid_prerelease(part)) {
@@ -335,13 +335,13 @@ namespace semver
 
             try {
                 if (strict && major_m.matched && minor_m.matched && patch_m.matched) {
-                    major = (BuildIdentifierPart)parse_version_identifier_or_exception(major_m);
-                    minor = (BuildIdentifierPart)parse_version_identifier_or_exception(minor_m);
-                    patch = (BuildIdentifierPart)parse_version_identifier_or_exception(patch_m);
+                    major = (BuildIdentifierPart) parse_version_identifier_part(major_m);
+                    minor = (BuildIdentifierPart) parse_version_identifier_part(minor_m);
+                    patch = (BuildIdentifierPart) parse_version_identifier_part(patch_m);
                 } else if (!strict && major_m.matched) {
-                    major = (BuildIdentifierPart)parse_version_identifier_or_exception(major_m);
-                    minor = minor_m.matched ? (BuildIdentifierPart)parse_version_identifier_or_exception(minor_m) : 0;
-                    patch = patch_m.matched ? (BuildIdentifierPart)parse_version_identifier_or_exception(patch_m) : 0;
+                    major = (BuildIdentifierPart) parse_version_identifier_part(major_m);
+                    minor = minor_m.matched ? (BuildIdentifierPart) parse_version_identifier_part(minor_m) : 0;
+                    patch = patch_m.matched ? (BuildIdentifierPart) parse_version_identifier_part(patch_m) : 0;
                 } else {
                     throw semver_exception("Invalid version: " + version_str);
                 }
